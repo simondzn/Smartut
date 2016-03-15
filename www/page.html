@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+    <title>Hello World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="jquerymobile/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<script>
+
+    $(document).on("pageinit", "#newpage", function () {
+//        window.localStorage.clear();
+var data = [];
+var a;
+//        var data[] = JSON.parse(localStorage.getItem("name"));
+        $('#saveButton').click(function () {
+            var id = new Date().getTime();
+            var name =$('#name').val();
+            var temp = {
+                id: id,
+                name: name
+            };
+            if(a==null){
+                a=0;
+            }
+            console.log("click "+ JSON.stringify(temp));
+//            localStorage.setItem("name", $('#name').val());
+//            var name = JSON.parse(localStorage.getItem("name"));
+            data[a] = JSON.stringify(temp);
+            localStorage.setItem("name", JSON.stringify(data));
+            console.log("name: " + data.toString());
+            a++;
+            var personName = $.parseJSON(localStorage["name"]);
+            if (personName != null) {
+                var i;
+                $.each(personName, function (key, value) {
+                    console.log(key + " + " + value);
+                    var now = JSON.parse(value);
+                    var keys = key;
+                    $("#newpage").append('<a id="' + key + ' "  onclick="removeme(this.id)">' + now.name + '</a>' + '<br>');
+                });
+            }
+        });
+    });
+function removeme(key) {
+    console.log(key);
+    var personName = $.parseJSON(localStorage["name"]);
+    console.log("person[]: " + personName[parseInt(key)]);
+    delete personName[parseInt(key)];
+    console.log("person[after]: " + personName[key]);
+    console.log("person: " + personName);
+    localStorage.setItem("name", JSON.stringify(personName));
+
+
+}
+
+    $(document).on('pageshow', '#newpage', function () {
+        var personName = $.parseJSON(localStorage["name"]);
+        a = personName.length;
+        console.log("person: " + personName);
+        if (personName != null) {
+            var i;
+            $.each(personName, function (key, value) {
+                console.log(key + " + " + value);
+                var now = JSON.parse(value);
+                var keys = key;
+                $("#newpage").append('<a id="' + key +' "  onclick="removeme(this.id)">' + now.name + '</a>'+ '<br>');
+            });
+//                for (i = 0; i < personName.length; i++) {
+//                    console.log("from data " + personName[i].name);
+//                    $("#newpage").append('<p>' + personName[i].name.toString() + '</p>');
+//            }
+        }
+    });
+</script>
+<body>
+<div id="home" data-role="page">
+    <div data-role="header">
+        <h1>
+            Home Page</h1>
+    </div>
+    <div data-role="content">
+        hello Phone Gap and JQuery Mobile! <a href="#newpage" data-role="button">new page</a>
+    </div>
+    <div data-role="footer" data-position="fixed">
+        <h4>
+            footer</h4>
+    </div>
+</div>
+
+
+<div id="newpage" data-role="page">
+    <div data-role="header">
+        <h1>
+            new Page</h1>
+    </div>
+    <div data-role="content">
+        <label for="name">what is your name?</label>
+        <input id="name" type="text" name="name" value=""/>
+        <a id="saveButton" href="" data-role="button">Save</a>
+    </div>
+    <p>localStorage</p>
+    <div data-role="footer" data-position="fixed">
+        <h4>
+            footer</h4>
+    </div>
+</div>
+</body>
+</html>
